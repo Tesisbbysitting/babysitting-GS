@@ -1,0 +1,160 @@
+[
+  {
+    "id": "7",
+    "nombre": "Prueba",
+    "edad": 20,
+    "foto": "x",
+    "zona": "San Isidro",
+    "rating": 5,
+    "disponibilidad": "Sábado: Tarde",
+    "universidad": "ITBA",
+    "carrera": "Gestion de Negocios",
+    "experiencia": "x",
+    "descripcion": "x",
+    "hobbies": [],
+    "comentarios": [],
+    "precioPorHora": "8000",
+    "contadorReservas": 0
+  },
+  {
+    "id": "1747943374643",
+    "nombre": "PRUEBA 2",
+    "edad": 19,
+    "foto": "XXX",
+    "zona": "San Isidro",
+    "rating": 5,
+    "disponibilidad": "Miércoles: Tarde, Miércoles: Noche, Sábado: Tarde, Sábado: Noche, Domingo: Tarde",
+    "universidad": "austral",
+    "carrera": "medicina",
+    "experiencia": "no tengo nada de experiencia",
+    "descripcion": "hola soy caro",
+    "hobbies": [
+      "Futbol",
+      "Piano",
+      "Tenis",
+      "Hockey"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Pablito",
+        "fecha": "22/5/2025",
+        "rating": 5,
+        "texto": "una crack"
+      }
+    ],
+    "precioPorHora": "",
+    "contadorReservas": 0
+  },
+  {
+    "id": "1747945401632",
+    "nombre": "Lucila Nicora",
+    "edad": 22,
+    "foto": "x",
+    "zona": "Martinez",
+    "rating": 5,
+    "disponibilidad": "Viernes: Noche, Sábado: Noche, Domingo: Noche",
+    "universidad": "ITBA",
+    "carrera": "Gestion de Negocios",
+    "experiencia": "odia a los niños",
+    "descripcion": "es esclavizadora",
+    "hobbies": [
+      "Rulos"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Pipi",
+        "fecha": "22/5/2025",
+        "rating": 1,
+        "texto": "casi me mata a un pibe"
+      },
+      {
+        "nombre": "Carlito",
+        "fecha": "21/5/2025",
+        "rating": 5,
+        "texto": "crack"
+      }
+    ],
+    "precioPorHora": "8500",
+    "contadorReservas": "1"
+  },
+  {
+    "id": "1748284772736",
+    "nombre": "Chiara Demaria",
+    "edad": 22,
+    "foto": "https://i.imgur.com/hJguTMQ.jpeg",
+    "zona": "Recoleta",
+    "disponibilidad": "Viernes: Noche, Sábado: Noche",
+    "universidad": "Austral",
+    "carrera": "Medicina",
+    "experiencia": "cuba",
+    "descripcion": "esta es una descripcion sobre chiara",
+    "hobbies": [
+      "gimnasia artistica",
+      "core",
+      "dibujar"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Tralela",
+        "fecha": "26/5/2025",
+        "rating": 5,
+        "texto": "chiara crack divina diosa"
+      }
+    ],
+    "precioPorHora": "8500",
+    "contadorReservas": "4"
+  },
+  {
+    "id": "1748285876419",
+    "nombre": "Carolina Lasalvia",
+    "edad": 22,
+    "foto": "https://i.imgur.com/Ndoe0fn.jpeg",
+    "zona": "San Isidro",
+    "disponibilidad": "Viernes: Noche",
+    "universidad": "UCA",
+    "carrera": "Psicología",
+    "experiencia": "2 años",
+    "descripcion": "mala pero cutie",
+    "hobbies": [
+      "tenis",
+      "piano",
+      "futbol"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Kiki",
+        "fecha": "26/5/2025",
+        "rating": 5,
+        "texto": "capa"
+      },
+      {
+        "nombre": "Pipu",
+        "fecha": "26/5/205",
+        "rating": 4,
+        "texto": "me cae bien"
+      }
+    ],
+    "precioPorHora": "9000",
+    "contadorReservas": "3"
+  },
+  {
+    "id": "1748476705625",
+    "nombre": "Isabella Serrano",
+    "edad": 20,
+    "foto": "https://i.imgur.com/Ndoe0fn.jpeg",
+    "zona": "La Horqueta",
+    "disponibilidad": "Viernes: Noche, Sábado: Noche, Domingo: Noche",
+    "universidad": "ITBA",
+    "carrera": "Gestion de Negocios",
+    "experiencia": "Ama lo niños, hizo babysitting....",
+    "descripcion": "Ella es copada",
+    "hobbies": [
+      "Sudoku",
+      "Futbol",
+      "Danza"
+    ],
+    "comentarios": [],
+    "precioPorHora": "9000",
+    "contadorReservas": 0
+  }
+]
