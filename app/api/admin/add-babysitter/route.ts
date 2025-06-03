@@ -5,7 +5,15 @@ import path from "path"
 export async function POST(request: Request) {
   try {
     const newBabysitter = await request.json()
-    const filePath = path.join(process.cwd(), "data", "babysitters.json")
+    // Usar una ruta absoluta en la raíz del proyecto
+    const filePath = path.join(process.cwd(), "public", "data", "babysitters.json")
+    
+    // Asegurarse de que el directorio existe
+    const dirPath = path.dirname(filePath)
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true })
+    }
+
     let babysittersArr = []
     try {
       const fileContent = fs.readFileSync(filePath, "utf8")

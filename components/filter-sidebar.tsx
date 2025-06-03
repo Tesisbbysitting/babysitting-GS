@@ -109,7 +109,7 @@ export function FilterSidebar({ filters, onFilterChange, onResetFilters, zonasDi
         <h3 className="font-medium text-sm mb-2">Zona</h3>
         <div className="space-y-2">
           {zonasDisponibles.map((zona) => (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" key={zona}>
               <Checkbox
                 id={`zona-${zona}`}
                 checked={localFilters.zonas.includes(zona)}

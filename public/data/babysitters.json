@@ -1,0 +1,104 @@
+[
+  {
+    "id": "1748978514972",
+    "nombre": "Martina Lasalvia",
+    "edad": 20,
+    "foto": "https://i.imgur.com/ks8L6kM.jpeg",
+    "zona": "San Isidro",
+    "disponibilidad": "Lunes: Tarde, Martes: Tarde, Miércoles: Tarde, Jueves: Tarde, Viernes: Noche, Sábado: Tarde",
+    "universidad": "FADU - UBA",
+    "carrera": "Arquitectura",
+    "experiencia": "Varias veces cuide a mis primos, cuando mis tías necesitaban ayuda.",
+    "descripcion": "Me llamo Martina Lasalvia, tengo 20 años, vivo en San Isidro y fui a la Goethe Schule. Actualmente estudio Arquitectura en FADU. Me encanta mi carrera, ya que soy una persona creativa, pero a la vez lógica y analítica. Disfruto pasar tiempo con mis amigas y familia. Me gusta mucho el sur argentino y el deporte.",
+    "hobbies": [
+      "Hockey",
+      "Tenis",
+      "Piano",
+      "Juegos de Mesa",
+      "Esquiar",
+      "Dibujar"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Sofia Lasalvia (Hermana), ex alumna de la Goethe Schule",
+        "fecha": "2/6/2025",
+        "rating": 5,
+        "texto": "Martina es una excelente niñera, muy responsable y cariñosa con los niños. La recomiendo ampliamente para cuidar a tus pequeños."
+      },
+      {
+        "nombre": "Manuel Sajaroff, ex alumno de la Goethe Schule",
+        "fecha": "2/6/2025",
+        "rating": 5,
+        "texto": "Es muy responsable y le encanta estar con chicos. Tiene experiencia cuidado a sus primos de distintas edades, es cariñosa, paciente y siempre está atenta a todos. "
+      }
+    ],
+    "precioPorHora": "9000",
+    "contadorReservas": ""
+  },
+  {
+    "id": "1748979380423",
+    "nombre": "Maria Eiffler",
+    "edad": 21,
+    "foto": "https://i.imgur.com/nry2QkG.jpeg",
+    "zona": "Barrios Bancalari",
+    "disponibilidad": "Lunes: Mañana, Martes: Mañana, Miércoles: Mañana, Jueves: Mañana, Viernes: Mañana, Sábado: Mañana, Domingo: Mañana",
+    "universidad": "ITBA",
+    "carrera": "Ingeniería Industrial",
+    "experiencia": "Hace unos 3 meses empecé a ser babysitter de chicos de cualquier edad y hace 3 años trabajo en el verano en un jardín maternal que se llama Mecki’s. Siempre estoy con chicos de entre 1 y 3 años.",
+    "descripcion": "Me llamo María, tengo 21 años, estudio ingeniería industrial y estoy terminando 3er año. Me agresé del colegio en 2022 y soy babysitter hace unos meses más que nada de familias de la comunidad del colegio.",
+    "hobbies": [
+      "Tenis",
+      "Padel",
+      "Tomar mate",
+      "Juntarse con amigos"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Natalia Lepora, madre de un hijo de Jardín de Infantes de la Goethe Schule",
+        "fecha": "2/6/2025",
+        "rating": 5,
+        "texto": "Joaco se divirtió mucho con María y ya pregunta cuando va a volver! Seguramente la llame devuelta pronto."
+      },
+      {
+        "nombre": "Anita Cougnet, ex alumna del Colegio Goethe",
+        "fecha": "2/6/2025",
+        "rating": 5,
+        "texto": "María cuido a mi hermanito hoy a la tarde, hicieron la tarea y cocinaron unas cookies de avenas re ricas! Él estaba muy contento"
+      }
+    ],
+    "precioPorHora": "8500",
+    "contadorReservas": ""
+  },
+  {
+    "id": "1748980005975",
+    "nombre": "Emilia Cremonini",
+    "edad": 20,
+    "foto": "https://i.imgur.com/8pBik7g.jpeg",
+    "zona": "La Horqueta",
+    "disponibilidad": "Lunes: Noche, Martes: Noche, Miércoles: Noche, Jueves: Noche, Viernes: Noche",
+    "universidad": "FADU - UBA",
+    "carrera": "Arquitectura",
+    "experiencia": "Cuide a los hijos de amigos de mi familia. La mayoría de la Goethe. La experiencia fue muy buena y fue muy llevadero.",
+    "descripcion": "Mi nombre es Emilia Cremonini, vivo en San isidro y tengo 20 años. Fui a la Goethe Schule y actualmente estoy estudiando arquitectura en FADU. Estoy muy contenta con mi carrera ya que me apasiona mucho. En mi tiempo libre me gusta pasar el tiempo con mis amigos y familia. Me gustan mucho los animales  y leer.",
+    "hobbies": [
+      "Leer",
+      "Pintar"
+    ],
+    "comentarios": [
+      {
+        "nombre": "Martina Lasalvia, ex alumna de la Gothe Schule y niñera de BUMI",
+        "fecha": "2/6/2025",
+        "rating": 5,
+        "texto": "Tiene muy buena onda con los chicos y se nota que le gusta cuidarlos. Es puntual, confiable y sabe cómo entretenerlos sin dejar de estar atenta a todo. Ya cuidó a varios y siempre recibió buenas referencias. Es de esas personas en las que se puede confiar con los ojos cerrados."
+      },
+      {
+        "nombre": "Bettina Mingramm, ex alumna y madre del Colegio Goethe",
+        "fecha": "2/6/2025",
+        "rating": 5,
+        "texto": "Emilia es muy cariñosa y responsable; los chicos están felices cada vez que anuncio su llegada, Tiene una energía alegre y proactiva, se pasa horas jugando y diviertiéndose con los chicos. Los ayuda con las tareas y es dulce y delicada a la hora de enseñarles. Me deja tranquila saber que mis hijos la quieren. Es un placer tener a Emi en mi casa!"
+      }
+    ],
+    "precioPorHora": "8500",
+    "contadorReservas": 0
+  }
+]
