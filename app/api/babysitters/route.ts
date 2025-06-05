@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 
+// API para obtener babysitters desde el archivo JSON estático
 export async function GET() {
   try {
     // Detectar el dominio base según entorno
