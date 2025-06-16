@@ -35,10 +35,9 @@ export default function PerfilPage() {
 
   useEffect(() => {
     async function fetchBabysitter() {
-      const res = await fetch("/api/babysitters")
+      const res = await fetch(`/api/babysitters/${id}`)
       const data = await res.json()
-      const found = data.babysitters.find((b: Babysitter) => b.id === id)
-      setBabysitter(found || null)
+      setBabysitter(data.babysitter || null)
       setLoading(false)
     }
     if (id) fetchBabysitter()

@@ -1,23 +1,23 @@
 import { NextResponse } from "next/server"
-import fs from "fs"
-import path from "path"
+import { supabase } from "@/lib/supabaseClient"
 
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json()
-    const filePath = path.join(process.cwd(), "public", "data", "babysitters.json")
-    
-    // Asegurarse de que el directorio existe
-    const dirPath = path.dirname(filePath)
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true })
+
+    // Eliminar la babysitter de Supabase
+    const { data, error } = await supabase
+      .from('Babysitters')
+      .delete()
+      .eq('id', id)
+      .select()
+
+    if (error) {
+      console.error("Error al eliminar babysitter:", error)
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 })
     }
 
-    const fileContent = fs.readFileSync(filePath, "utf8")
-    let babysittersArr = JSON.parse(fileContent)
-    babysittersArr = babysittersArr.filter((b: any) => b.id !== id)
-    fs.writeFileSync(filePath, JSON.stringify(babysittersArr, null, 2), "utf8")
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, data })
   } catch (error) {
     console.error("Error al eliminar babysitter:", error)
     return NextResponse.json({ success: false, error: "Error interno del servidor" }, { status: 500 })
