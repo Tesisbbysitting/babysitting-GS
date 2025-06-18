@@ -9,14 +9,17 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 min-w-0 flex-shrink">
           <Image
             src="/bumi.jpg"
             alt="Logo BUMI"
             width={80}
             height={80}
+            className="h-8 w-auto sm:h-10"
           />
-          <span className="text-xl font-bold text-goetheGold whitespace-nowrap">Babysitting Goethe Schule</span>
+          <span className="text-xl sm:text-2xl md:text-3xl font-bold text-goetheGold text-center block">
+            Babysitting Goethe
+          </span>
         </Link>
         {/* Desktop nav */}
         <nav className="hidden md:flex gap-4">
