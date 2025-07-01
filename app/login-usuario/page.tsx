@@ -25,13 +25,13 @@ export default function LoginUsuario() {
       if (data.success && data.session) {
         // Guardar token en localStorage
         localStorage.setItem("sb_token", data.session.access_token);
-        // Redirigir según tipo de usuario
+        // Forzar reload para que el Navbar detecte el login
         if (data.tipo === "padre") {
-          router.push("/perfiles");
+          window.location.href = "/perfiles";
         } else if (data.tipo === "babysitter") {
-          router.push("/mi-perfil");
+          window.location.href = "/mi-perfil";
         } else {
-          router.push("/");
+          window.location.href = "/";
         }
       } else {
         setError(data.error || "Credenciales incorrectas");
