@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { BabysitterCard } from "@/components/babysitter-card"
 import { FilterSidebar } from "@/components/filter-sidebar"
@@ -11,9 +10,9 @@ export default function PerfilesPage() {
   const [babysitters, setBabysitters] = useState<Babysitter[]>([])
   const [filteredBabysitters, setFilteredBabysitters] = useState<Babysitter[]>([])
   const [filters, setFilters] = useState({
-    edad: [18, 30],
     zonas: [] as string[],
     dias: [] as string[],
+    turnos: [] as string[],
   })
   const [zonasDisponibles, setZonasDisponibles] = useState<string[]>([])
 
@@ -34,11 +33,6 @@ export default function PerfilesPage() {
   useEffect(() => {
     let result = [...babysitters]
 
-    // Filtrar por edad
-    if (filters.edad.length === 2) {
-      result = result.filter((babysitter) => babysitter.edad >= filters.edad[0] && babysitter.edad <= filters.edad[1])
-    }
-
     // Filtrar por zona
     if (filters.zonas.length > 0) {
       result = result.filter((babysitter) => filters.zonas.includes(babysitter.zona))
@@ -47,8 +41,14 @@ export default function PerfilesPage() {
     // Filtrar por días disponibles
     if (filters.dias.length > 0) {
       result = result.filter((babysitter) => {
-        // Verificar si alguno de los días seleccionados está en la disponibilidad
         return filters.dias.some((dia) => babysitter.disponibilidad.toLowerCase().includes(dia.toLowerCase()))
+      })
+    }
+
+    // Filtrar por turnos (mañana, tarde, noche)
+    if (filters.turnos && filters.turnos.length > 0) {
+      result = result.filter((babysitter) => {
+        return filters.turnos.some((turno) => babysitter.disponibilidad.toLowerCase().includes(turno.toLowerCase()))
       })
     }
 
@@ -64,16 +64,15 @@ export default function PerfilesPage() {
   // Función para resetear los filtros
   const handleResetFilters = () => {
     setFilters({
-      edad: [18, 30],
       zonas: [],
       dias: [],
+      turnos: [],
     })
     setFilteredBabysitters(babysitters)
   }
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1 container py-8">
         <h1 className="text-3xl font-bold text-goetheGreen mb-8">Perfiles de Babysitters</h1>
 

@@ -1,42 +1,78 @@
 'use client';
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
 
 export function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const token = typeof window !== 'undefined' ? localStorage.getItem("sb_token") : null;
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
+      try {
+        const res = await fetch("/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setIsLoggedIn(!!(data && data.success && data.user));
+      } catch {
+        setIsLoggedIn(false);
+      }
+    };
+    checkSession();
+  }, []);
+
+  const handleLoginClick = () => {
+    router.push("/login-usuario")
+  }
+
+  const handleProfileClick = () => {
+    router.push("/mi-perfil")
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-20 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2 min-w-0 flex-shrink">
           <Image
             src="/bumi.jpg"
             alt="Logo BUMI"
             width={80}
             height={80}
-            className="h-8 w-auto sm:h-10"
+            className="h-10 w-auto sm:h-12"
           />
-          <span className="text-xl sm:text-2xl md:text-3xl font-bold text-goetheGold text-center block">
-            Babysitting Goethe
-          </span>
         </Link>
         {/* Desktop nav */}
-        <nav className="hidden md:flex gap-4">
-          <Link href="/" className="text-sm font-medium text-goetheGreen hover:text-goetheGreen/80">
+        <nav className="hidden md:flex items-center gap-8">
+          <Link href="/" className="text-lg font-semibold text-goetheGreen hover:text-goetheGreen/80 px-2 py-1 rounded-md transition-colors">
             Inicio
           </Link>
-          <Link href="/perfiles" className="text-sm font-medium text-goetheGreen hover:text-goetheGreen/80">
+          <Link href="/perfiles" className="text-lg font-semibold text-goetheGreen hover:text-goetheGreen/80 px-2 py-1 rounded-md transition-colors">
             Perfiles
           </Link>
           <Link
-            href="https://forms.gle/KVrErwn5bufVeuMa8"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium text-goetheGreen hover:text-goetheGreen/80"
+            href="/registro-babysitter"
+            className="text-lg font-semibold text-goetheGreen hover:text-goetheGreen/80 px-2 py-1 rounded-md transition-colors"
           >
             Ser Babysitter
           </Link>
+          {!isLoggedIn ? (
+            <Button className="bg-goetheGreen hover:bg-goetheGreen/90 text-white px-8 py-3 text-lg font-semibold" onClick={handleLoginClick}>
+              Iniciar sesión
+            </Button>
+          ) : (
+            <Button variant="outline" className="border-goetheGreen text-goetheGreen hover:bg-goetheGreen/10 px-8 py-3 text-lg font-semibold" onClick={handleProfileClick}>
+              Mi Perfil
+            </Button>
+          )}
         </nav>
         {/* Mobile hamburger */}
         <button
@@ -70,14 +106,23 @@ export function Navbar() {
               Perfiles
             </Link>
             <Link
-              href="https://forms.gle/KVrErwn5bufVeuMa8"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/registro-babysitter"
               className="text-base font-medium text-goetheGreen"
               onClick={() => setSidebarOpen(false)}
             >
               Ser Babysitter
             </Link>
+            <div className="ml-auto flex items-center gap-4">
+              {!isLoggedIn ? (
+                <Button className="bg-goetheGreen hover:bg-goetheGreen/90 text-white w-full" onClick={handleLoginClick}>
+                  Iniciar sesión
+                </Button>
+              ) : (
+                <Button variant="outline" className="border-goetheGreen text-goetheGreen hover:bg-goetheGreen/10 w-full" onClick={handleProfileClick}>
+                  Mi Perfil
+                </Button>
+              )}
+            </div>
           </nav>
         </aside>
       </div>

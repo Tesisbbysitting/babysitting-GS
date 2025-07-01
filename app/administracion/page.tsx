@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Babysitter, Comentario } from "@/types/babysitter"
@@ -62,9 +61,9 @@ export default function AdministracionPage() {
   }, [])
 
   useEffect(() => {
-    // Cargar babysitters desde la API
+    // Cargar babysitters desde la API (todas)
     async function fetchBabysitters() {
-      const res = await fetch("/api/babysitters")
+      const res = await fetch("/api/babysitters/all")
       const data = await res.json()
       setBabysitters(data.babysitters)
     }
@@ -139,6 +138,25 @@ export default function AdministracionPage() {
     return seleccionados.join(", ")
   }
 
+  const parseDisponibilidad = (disponibilidadStr: string) => {
+    const obj: { [dia: string]: { [turno: string]: boolean } } = {};
+    DIAS.forEach(dia => {
+      obj[dia] = {};
+      TURNOS.forEach(turno => {
+        obj[dia][turno] = false;
+      });
+    });
+    if (disponibilidadStr) {
+      disponibilidadStr.split(",").forEach(item => {
+        const [dia, turno] = item.split(":").map(s => s.trim());
+        if (obj[dia] && turno && obj[dia][turno] !== undefined) {
+          obj[dia][turno] = true;
+        }
+      });
+    }
+    return obj;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
@@ -175,70 +193,62 @@ export default function AdministracionPage() {
     setEditMode(false)
     setEditId(null)
     // Refrescar el listado
-    const res = await fetch("/api/babysitters")
+    const res = await fetch("/api/babysitters/all")
     const data = await res.json()
     setBabysitters(data.babysitters)
     setTimeout(() => setSuccess(""), 2000)
   }
 
+  // Separar aprobadas y no aprobadas
+  const aprobadas = (babysitters || []).filter(b => b.aprobado)
+  const noAprobadas = (babysitters || []).filter(b => !b.aprobado)
+
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1 container py-8">
         <h1 className="text-2xl font-bold mb-6">Panel de Administración de Babysitters</h1>
         <Button className="mb-6" onClick={() => setShowModal(true)}>
           Nueva Babysitter
         </Button>
-        <div className="overflow-x-auto">
+        <h2 className="text-xl font-semibold mb-2 mt-6">Perfiles NO Aprobados</h2>
+        <div className="overflow-x-auto mb-8">
           <table className="min-w-full border text-sm">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border px-2 py-1">ID</th>
-                <th className="border px-2 py-1">Nombre</th>
-                <th className="border px-2 py-1">Edad</th>
-                <th className="border px-2 py-1">Zona</th>
-                <th className="border px-2 py-1">Rating</th>
-                <th className="border px-2 py-1">Precio por hora</th>
-                <th className="border px-2 py-1">Reservas</th>
-                <th className="border px-2 py-1">Acciones</th>
+                <th className="border px-2 py-1 w-16">ID</th>
+                <th className="border px-2 py-1 w-40">Nombre</th>
+                <th className="border px-2 py-1 w-20">Edad</th>
+                <th className="border px-2 py-1 w-40">Zona</th>
+                <th className="border px-2 py-1 min-w-[180px]">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {babysitters.map((b) => (
+              {noAprobadas.map((b) => (
                 <tr key={b.id}>
                   <td className="border px-2 py-1">{b.id}</td>
                   <td className="border px-2 py-1">{b.nombre}</td>
                   <td className="border px-2 py-1">{b.edad}</td>
                   <td className="border px-2 py-1">{b.zona}</td>
-                  <td className="border px-2 py-1">{b.rating}</td>
-                  <td className="border px-2 py-1">{b.precioPorHora}</td>
-                  <td className="border px-2 py-1">{b.contadorReservas}</td>
-                  <td className="border px-2 py-1 flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => {
-                      setShowModal(true)
+                  <td className="border px-2 py-1 min-w-[180px] flex gap-2">
+                    <Button size="sm" onClick={() => {
                       setEditMode(true)
                       setEditId(b.id)
-                      setForm({ ...b })
+                      setForm(b)
+                      setDisponibilidadTable(parseDisponibilidad(b.disponibilidad))
                       setComentarios(b.comentarios || [])
-                      setHobbyInput("")
-                      // reconstruir disponibilidadTable
-                      const dispTable: any = {}
-                      DIAS.forEach(dia => {
-                        dispTable[dia] = {}
-                        TURNOS.forEach(turno => {
-                          dispTable[dia][turno] = false
-                        })
+                      setShowModal(true)
+                    }}>Editar</Button>
+                    <Button size="sm" onClick={async () => {
+                      await fetch("/api/babysitters/approve", {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: b.id })
                       })
-                      if (b.disponibilidad) {
-                        b.disponibilidad.split(",").forEach((item: string) => {
-                          const [dia, turno] = item.split(":").map(s => s.trim())
-                          if (dispTable[dia] && turno) dispTable[dia][turno] = true
-                        })
-                      }
-                      setDisponibilidadTable(dispTable)
-                    }}>
-                      Editar
-                    </Button>
+                      // Refrescar
+                      const res = await fetch("/api/babysitters/all")
+                      const data = await res.json()
+                      setBabysitters(data.babysitters)
+                    }}>Aprobar</Button>
                     <Button size="sm" variant="destructive" onClick={async () => {
                       if (window.confirm("¿Seguro que querés eliminar esta babysitter?")) {
                         await fetch("/api/admin/delete-babysitter", {
@@ -246,14 +256,72 @@ export default function AdministracionPage() {
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({ id: b.id })
                         })
-                        // Refrescar el listado
-                        const res = await fetch("/api/babysitters")
+                        // Refrescar
+                        const res = await fetch("/api/babysitters/all")
                         const data = await res.json()
                         setBabysitters(data.babysitters)
                       }
-                    }}>
-                      Eliminar
-                    </Button>
+                    }}>Eliminar</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <h2 className="text-xl font-semibold mb-2 mt-6">Perfiles Aprobados</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full border text-sm">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border px-2 py-1 w-16">ID</th>
+                <th className="border px-2 py-1 w-40">Nombre</th>
+                <th className="border px-2 py-1 w-20">Edad</th>
+                <th className="border px-2 py-1 w-40">Zona</th>
+                <th className="border px-2 py-1 min-w-[180px]">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {aprobadas.map((b) => (
+                <tr key={b.id}>
+                  <td className="border px-2 py-1">{b.id}</td>
+                  <td className="border px-2 py-1">{b.nombre}</td>
+                  <td className="border px-2 py-1">{b.edad}</td>
+                  <td className="border px-2 py-1">{b.zona}</td>
+                  <td className="border px-2 py-1 min-w-[180px] flex gap-2">
+                    <Button size="sm" onClick={() => {
+                      setEditMode(true)
+                      setEditId(b.id)
+                      setForm(b)
+                      setDisponibilidadTable(parseDisponibilidad(b.disponibilidad))
+                      setComentarios(b.comentarios || [])
+                      setShowModal(true)
+                    }}>Editar</Button>
+                    <Button size="sm" variant="outline" onClick={async () => {
+                      if (window.confirm("¿Seguro que querés desaprobar esta babysitter? Su perfil dejará de ser visible.")) {
+                        await fetch("/api/babysitters/disapprove", {
+                          method: "PUT",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ id: b.id })
+                        })
+                        // Refrescar
+                        const res = await fetch("/api/babysitters/all")
+                        const data = await res.json()
+                        setBabysitters(data.babysitters)
+                      }
+                    }}>Desaprobar</Button>
+                    <Button size="sm" variant="destructive" onClick={async () => {
+                      if (window.confirm("¿Seguro que querés eliminar esta babysitter?")) {
+                        await fetch("/api/admin/delete-babysitter", {
+                          method: "DELETE",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ id: b.id })
+                        })
+                        // Refrescar
+                        const res = await fetch("/api/babysitters/all")
+                        const data = await res.json()
+                        setBabysitters(data.babysitters)
+                      }
+                    }}>Eliminar</Button>
                   </td>
                 </tr>
               ))}

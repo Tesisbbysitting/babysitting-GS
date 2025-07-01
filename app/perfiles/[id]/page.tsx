@@ -3,7 +3,6 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Star, MapPin, Calendar, GraduationCap, Heart } from "lucide-react"
-import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -32,6 +31,8 @@ export default function PerfilPage() {
   const id = typeof params.id === "string" ? params.id : Array.isArray(params.id) ? params.id[0] : "";
   const [babysitter, setBabysitter] = useState<Babysitter | null>(null)
   const [loading, setLoading] = useState(true)
+  const [usuario, setUsuario] = useState<any>(null)
+  const [checkingUser, setCheckingUser] = useState(true)
 
   useEffect(() => {
     async function fetchBabysitter() {
@@ -41,20 +42,45 @@ export default function PerfilPage() {
       setLoading(false)
     }
     if (id) fetchBabysitter()
-  }, [id])
+
+    // Chequear sesión y tipo de usuario
+    const checkUser = async () => {
+      const token = typeof window !== 'undefined' ? localStorage.getItem("sb_token") : null;
+      if (!token) {
+        setUsuario(null)
+        setCheckingUser(false)
+        return
+      }
+      try {
+        const res = await fetch("/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const data = await res.json()
+        if (data.success && data.tipo === "padre") {
+          setUsuario(data)
+        } else {
+          setUsuario(null)
+        }
+      } catch {
+        setUsuario(null)
+      } finally {
+        setCheckingUser(false)
+      }
+    }
+    checkUser()
+  }, [])
 
   if (loading) {
-    return <div className="flex min-h-screen flex-col"><Navbar /><main className="flex-1 flex items-center justify-center">Cargando...</main><Footer /></div>
+    return <div className="flex min-h-screen flex-col"><main className="flex-1 flex items-center justify-center">Cargando...</main><Footer /></div>
   }
   if (!babysitter) {
-    return <div className="flex min-h-screen flex-col"><Navbar /><main className="flex-1 flex items-center justify-center">Babysitter no encontrada</main><Footer /></div>
+    return <div className="flex min-h-screen flex-col"><main className="flex-1 flex items-center justify-center">Babysitter no encontrada</main><Footer /></div>
   }
 
   const ratingPromedio = calcularRating(babysitter)
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1 container py-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/3">
@@ -78,7 +104,7 @@ export default function PerfilPage() {
                       <div className="flex items-center bg-goetheGold/10 px-2 py-1 rounded">
                         {babysitter.comentarios && babysitter.comentarios.length > 0 ? (
                           <>
-                            <Star className="h-4 w-4 fill-goetheGold text-goetheGold" />
+                        <Star className="h-4 w-4 fill-goetheGold text-goetheGold" />
                             <span className="ml-1 font-medium">{ratingPromedio}</span>
                           </>
                         ) : null}
@@ -111,27 +137,59 @@ export default function PerfilPage() {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {babysitter.hobbies.map((hobby, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="bg-goetheGreen/10 text-goetheGreen border-goetheGreen/20"
-                        >
-                          {hobby}
-                        </Badge>
-                      ))}
+                      {(() => {
+                        let hobbiesArr: string[] = [];
+                        if (Array.isArray(babysitter.hobbies)) {
+                          hobbiesArr = babysitter.hobbies;
+                        } else if (typeof babysitter.hobbies === "string") {
+                          try {
+                            const parsed = JSON.parse(babysitter.hobbies);
+                            if (Array.isArray(parsed)) {
+                              hobbiesArr = parsed;
+                            } else {
+                              hobbiesArr = babysitter.hobbies.split(",").map((h: string) => h.trim());
+                            }
+                          } catch {
+                            hobbiesArr = babysitter.hobbies.split(",").map((h: string) => h.trim());
+                          }
+                        }
+                        return hobbiesArr.map((hobby, index) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className="bg-goetheGreen/10 text-goetheGreen border-goetheGreen/20"
+                          >
+                            {hobby}
+                          </Badge>
+                        ));
+                      })()}
                     </div>
 
                     <div className="space-y-3">
-                      <Link
-                        href="https://forms.gle/qVyWVDapSywmzwfF9"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block w-full"
-                      >
-                        <Button className="w-full bg-goetheGreen hover:bg-goetheGreen/90">Reservar Babysitter</Button>
-                      </Link>
-
+                      {usuario ? (
+                        <a
+                          href="https://wa.me/5491155857064?text=Hola,%20quiero%20reservar%20una%20Babysitter"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full"
+                        >
+                          <Button
+                            className="w-full bg-goetheGreen hover:bg-goetheGreen/90"
+                          >
+                            Reservar Babysitter
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button
+                          className="w-full bg-goetheGreen hover:bg-goetheGreen/90"
+                          disabled
+                        >
+                          Reservar Babysitter
+                        </Button>
+                      )}
+                      {(!checkingUser && !usuario) && (
+                        <div className="text-sm text-red-600 text-center mt-2">Debes iniciar sesión como padre para reservar.</div>
+                      )}
                       <Link href="/perfiles" className="block w-full">
                         <Button variant="outline" className="w-full">
                           Volver a Perfiles

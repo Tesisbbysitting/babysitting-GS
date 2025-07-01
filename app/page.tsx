@@ -1,12 +1,10 @@
 import Link from "next/link"
-import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-8 md:py-16 lg:py-20 bg-gradient-to-b from-goetheGreen/10 to-white">
@@ -22,10 +20,10 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
                 <Link href="/perfiles">
-                  <Button className="bg-goetheGreen hover:bg-goetheGreen/90">Ver Perfiles</Button>
+                  <Button className="bg-goetheGreen hover:bg-goetheGreen/90 text-lg px-8 py-3">Ver Perfiles</Button>
                 </Link>
-                <Link href="https://forms.gle/KVrErwn5bufVeuMa8" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-goetheGold text-goetheGold hover:bg-goetheGold/10">
+                <Link href="/registro-babysitter">
+                  <Button variant="outline" className="border-goetheGold text-goetheGold hover:bg-goetheGold/10 text-lg px-8 py-3">
                     Quiero ser Babysitter
                   </Button>
                 </Link>

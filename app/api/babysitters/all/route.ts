@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server"
 import { supabase } from "@/lib/supabaseClient"
 
-// API para obtener babysitters desde Supabase
 export async function GET() {
   try {
-    // Obtener babysitters desde Supabase
     const { data: babysittersData, error } = await supabase
       .from('Babysitters')
       .select('*')
-      .eq('aprobado', true)
       .order('id', { ascending: true })
 
     if (error) {
-      console.error("[babysitters API] Error obteniendo babysitters:", error)
-      return NextResponse.json({ babysitters: [], zonasDisponibles: [], error: "Error obteniendo babysitters" })
+      return NextResponse.json({ babysitters: [], error: error.message }, { status: 500 })
     }
 
     // Obtener todos los comentarios
@@ -22,15 +18,11 @@ export async function GET() {
       .select('*')
       .order('id', { ascending: false })
 
-    if (comentariosError) {
-      console.error("[babysitters API] Error obteniendo comentarios:", comentariosError)
-    }
-
     // Agrupar comentarios por babysitter_id
     const comentariosPorBabysitter: { [key: string]: any[] } = {}
     if (comentariosData) {
       comentariosData.forEach(comentario => {
-        const babysitterId = comentario.babysitter_id.toString()
+        const babysitterId = comentario.babysitter_id?.toString()
         if (!comentariosPorBabysitter[babysitterId]) {
           comentariosPorBabysitter[babysitterId] = []
         }
@@ -57,21 +49,13 @@ export async function GET() {
         : [],
       precioPorHora: babysitter.Precio_por_hora,
       contadorReservas: babysitter.Contador_reservas,
-      rating: 5, // Rating por defecto, después lo calcularemos desde comentarios
-      comentarios: comentariosPorBabysitter[babysitter.id.toString()] || [] // Comentarios relacionados
+      aprobado: babysitter.aprobado,
+      correo: babysitter.correo,
+      comentarios: comentariosPorBabysitter[babysitter.id?.toString()] || []
     }))
 
-    // Generar zonas disponibles
-    const zonasDisponibles = Array.from(new Set(
-      babysittersArr
-        .map((b: any) => String(b.zona || "").trim())
-        .filter((z: string) => z.length > 0)
-    )) as string[]
-    zonasDisponibles.sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
-
-    return NextResponse.json({ babysitters: babysittersArr, zonasDisponibles })
+    return NextResponse.json({ babysitters: babysittersArr })
   } catch (e) {
-    console.error("[babysitters API] Error:", e)
-    return NextResponse.json({ babysitters: [], zonasDisponibles: [], error: "Error interno del servidor" })
+    return NextResponse.json({ babysitters: [], error: "Error interno del servidor" }, { status: 500 })
   }
 } 

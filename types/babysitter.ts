@@ -21,4 +21,5 @@ export interface Babysitter {
   comentarios: Comentario[]
   precioPorHora: string
   contadorReservas: number
+  aprobado?: boolean
 }
