@@ -28,6 +28,19 @@ export function Navbar() {
       }
     };
     checkSession();
+    // Re-chequear sesión cuando cambia el token en otra pestaña o cuando vuelve el foco
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "sb_token") checkSession();
+    };
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") checkSession();
+    };
+    window.addEventListener("storage", handleStorage);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
 
   const handleLoginClick = () => {
